@@ -1,9 +1,56 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/index.module.css'
 
-export default function Home() {
+import Home from './home';
+import Earn from './earn';
+
+import Header from './components/header';
+import ChatBox from './components/chatBox';
+import ErrorPage from 'next/error';
+
+import { useState,useEffect } from "react";
+
+function Section(props) {
+  switch (props.content) {
+    case '/':
+      return <Home />;
+    case '/earn':
+      return <Earn />;
+    // case '/withdraw':
+    //   return <div>Withdraw</div>;
+    default:
+      return <ErrorPage statusCode={404}/>
+  }
+}
+
+const Index = (props) => {
+  const [selection, setSelection] = useState(props.path);
+
+  const updateSelection = (path) => {
+    setSelection(`/${path}`);
+  };
+
+
+  useEffect(() => {});
+
   return (
-    <div className={styles.container}>
+    <div className={"main-container"}>
+      <Head>
+        <title>GeekBux - Main</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Header func={updateSelection}/>
+      <main className={styles.main}>
+        <Section {...props} selection={selection} content={selection}/>
+        <ChatBox {...props}/>
+      </main>
+    </div>
+  )
+}
+
+export default Index;
+/*
+<div className={styles.container}>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -61,5 +108,4 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  )
-}
+*/
